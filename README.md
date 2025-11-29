@@ -48,6 +48,45 @@ A modern, feature-rich Todo application built with **Vue.js 3** and **Laravel 11
 - **Laravel Sanctum** - API authentication system
 - **Eloquent ORM** - Database abstraction layer
 
+### DevOps & Infrastructure
+- **AWS CloudFormation** - Infrastructure as Code (IaC)
+- **AWS EC2** - Ubuntu 22.04 LTS
+- **Nginx** - High-performance web server
+- **PHP-FPM 8.3** - FastCGI Process Manager
+- **Node.js 20 LTS** - JavaScript runtime for build tools
+
+## 🌐 Live Production Deployment
+
+**This application is deployed on AWS and accessible at:**
+
+- **Frontend URL:** http://13.51.18.118
+- **Backend API:** http://13.51.18.118/api
+- **API Health Check:** http://13.51.18.118/api (GET)
+
+### Deployment Infrastructure
+
+The application is deployed using **AWS CloudFormation** for automated infrastructure provisioning:
+
+- ✅ **EC2 Instance** - Ubuntu 22.04 LTS on AWS
+- ✅ **CloudFormation Stack** - Infrastructure as Code deployment
+- ✅ **Nginx Web Server** - Configured for Laravel + Vue.js SPA
+- ✅ **SSL-Ready** - Infrastructure prepared for HTTPS
+- ✅ **Security Groups** - Properly configured firewall rules
+- ✅ **Elastic IP** - Static public IP address
+
+### DevOps Skills Demonstrated
+
+This deployment showcases proficiency in:
+- 🚀 **Infrastructure as Code** (AWS CloudFormation)
+- 🚀 **Cloud Computing** (AWS EC2)
+- 🚀 **Linux System Administration** (Ubuntu Server)
+- 🚀 **Web Server Configuration** (Nginx, PHP-FPM)
+- 🚀 **Build Tool Management** (Node.js, Vite, npm)
+- 🚀 **Database Management** (SQLite permissions & configuration)
+- 🚀 **Security Best Practices** (File permissions, user groups)
+- 🚀 **Process Management** (systemd services)
+- 🚀 **Troubleshooting & Debugging** (Production environment issues)
+
 ## 📦 Installation & Setup
 
 ### Prerequisites
@@ -103,6 +142,88 @@ A modern, feature-rich Todo application built with **Vue.js 3** and **Laravel 11
 
 8. **Access the application**
    Open your browser and navigate to `http://localhost:8000`
+
+## ☁️ AWS Deployment (Production)
+
+### Deploy with AWS CloudFormation
+
+This project includes a CloudFormation template for automated AWS deployment:
+
+1. **Prerequisites**
+   - AWS Account with EC2 access
+   - AWS CLI configured or AWS Console access
+   - SSH key pair created in your AWS region
+
+2. **Deploy the CloudFormation Stack**
+   ```bash
+   # Using AWS CLI
+   aws cloudformation create-stack \
+     --stack-name todo-milemarker-app \
+     --template-body file://cloudformation-template.yaml \
+     --parameters ParameterKey=KeyName,ParameterValue=your-key-name
+   ```
+
+   Or use the AWS Console:
+   - Navigate to CloudFormation
+   - Create Stack → Upload template file
+   - Follow the wizard to configure parameters
+
+3. **SSH into EC2 Instance**
+   ```bash
+   ssh -i your-key.pem ubuntu@<ec2-public-ip>
+   ```
+
+4. **Setup Application on EC2**
+   ```bash
+   # Clone repository
+   cd /var/www/laravel
+   git clone https://github.com/yourusername/todo-milemarker.git .
+
+   # Install dependencies
+   composer install --no-dev --optimize-autoloader
+   npm install
+
+   # Build frontend assets
+   npm run build
+
+   # Configure environment
+   cp .env.example .env
+   php artisan key:generate
+   
+   # Setup database
+   touch database/database.sqlite
+   php artisan migrate --force
+
+   # Set permissions
+   sudo chown -R www-data:www-data storage bootstrap/cache public database
+   sudo chmod -R 775 storage bootstrap/cache database
+   sudo chmod 664 database/database.sqlite
+
+   # Clear and cache configurations
+   php artisan config:cache
+   php artisan route:cache
+   php artisan view:cache
+
+   # Restart services
+   sudo systemctl restart nginx
+   sudo systemctl restart php8.3-fpm
+   ```
+
+5. **Access Your Deployed Application**
+   - Visit `http://<your-ec2-public-ip>`
+   - API available at `http://<your-ec2-public-ip>/api`
+
+### Production Environment Variables
+
+Update `.env` on the server:
+```env
+APP_ENV=production
+APP_DEBUG=false
+APP_URL=http://your-ec2-public-ip
+
+DB_CONNECTION=sqlite
+DB_DATABASE=/var/www/laravel/database/database.sqlite
+```
 
 ## 🏗 Project Architecture
 
@@ -265,9 +386,25 @@ This project is open-sourced software licensed under the [MIT license](https://o
 
 ## 👨‍💻 Author
 
-Built as a demonstration of full-stack development capabilities using modern web technologies and best practices.
+**Dave Suy**
+
+Built as a demonstration of full-stack development and DevOps capabilities using modern web technologies and cloud infrastructure.
+
+### Skills Demonstrated:
+- ✅ **Full-Stack Development** - Laravel 11 + Vue.js 3
+- ✅ **Cloud Infrastructure** - AWS CloudFormation + EC2
+- ✅ **DevOps** - Infrastructure as Code, CI/CD practices
+- ✅ **System Administration** - Linux, Nginx, PHP-FPM configuration
+- ✅ **API Design** - RESTful principles, authentication
+- ✅ **Frontend Architecture** - Component-based design, state management
+
+### 🔗 Links
+
+- **GitHub Repository:** https://github.com/davesuy/todo-milemarker
+- **Live Production URL:** http://13.51.18.118
+- **API Endpoint:** http://13.51.18.118/api
 
 ---
 
-**Note**: This is a portfolio project demonstrating proficiency in Vue.js, Laravel, RESTful API design, and modern web development practices.
+**Note**: This is a portfolio project demonstrating proficiency in Vue.js, Laravel, RESTful API design, AWS CloudFormation deployment, and modern web development practices.
 
